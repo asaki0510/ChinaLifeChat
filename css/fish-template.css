@@ -1,0 +1,43 @@
+body {
+  padding-top: 20px;
+  
+}
+.starter-template {
+  padding: 0px 15px;
+  text-align: center;
+}
+
+
+.chatRoom{
+	visibility: hidden;  
+}
+#errorMessage{
+	color:red;
+	font-size:24px;
+	letter-spacing: 0.05em;
+    line-height: 20px;
+}
+.imgSrc{
+	max-width: 50%;
+}
+/* .caption{
+	word-break: break-all;
+}
+
+.chatTimestsamp{
+	text-align:right; 
+} */
+.close span
+{
+	font-size:40px;
+	
+}
+.modal-header .close {
+    margin-top: -30px;
+}
+.chatContent{
+	margin-bottom: 20px;
+}
+.inputArea{
+	margin-bottom: 20px;
+}
