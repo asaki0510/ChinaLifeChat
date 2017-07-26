@@ -1,0 +1,168 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="./favicon.ico">
+    <title>中鍋人壽便民外部網路</title>      
+	<link href="./css/bootstrap.css" rel="stylesheet">   
+	<link href="./css/bootstrap-theme.css" rel="stylesheet">   
+    <link href="./css/fish-template.css" rel="stylesheet">  
+	<link href="./css/nprogress.css" rel="stylesheet"> 	
+    <script src="./js/ie-emulation-modes-warning.js"></script>  
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>		
+	<script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+	<script src="./js/nprogress.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+	
+    <!--<script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyD-03LVmvC4HJrv1mTIsvxEf9jIcClD3Nw",
+        authDomain: "chatstage-c2784.firebaseapp.com",
+        databaseURL: "https://chatstage-c2784.firebaseio.com",
+        projectId: "chatstage-c2784",
+        storageBucket: "chatstage-c2784.appspot.com",
+        messagingSenderId: "972673004040"
+      };
+      firebase.initializeApp(config);
+    </script>-->
+	<script>
+	  // Initialize Firebase
+	  var config = {
+		apiKey: "AIzaSyD3xdzerjAmiY4Bycq1tkK7EnYd_JMYFzU",
+		authDomain: "chinalifechat.firebaseapp.com",
+		databaseURL: "https://chinalifechat.firebaseio.com",
+		storageBucket: "chinalifechat.appspot.com",
+		messagingSenderId: "636290907624"
+	  };
+	  firebase.initializeApp(config);
+	  
+	</script>
+</head>
+<body>
+
+
+
+<script>
+ $(document).ready(function () {
+        var url = window.location;   	 
+	    $(".nav li").removeClass('active');	
+        $('ul.nav a[href="' + url + '"]').parent().addClass('active');
+        $('ul.nav a').filter(function () {
+            return this.href == url;
+        }).parent().addClass('active');			
+    });
+</script>
+	 
+
+<nav class="navbar  navbar-default  container"> 
+    <div class="container">
+		<div class="navbar-header ">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <!--<a class="navbar-brand" href=""><img alt="Brand" src="./file/fish.jpg"></a>-->
+			  <a class="navbar-brand" >中鍋人壽便民外部網路</a>	
+		</div>
+		 
+		<div id="navbar" class="collapse navbar-collapse ">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="./">首頁</a></li>
+				<li><a href="chat.php">聊天室</a></li>   
+				<li><a href="CobolMoneyCount.php">缺錢QQ</a></li>
+				<li><a href="we-share-we-link.php">記憶不好</a></li>
+			</ul>	  
+		</div>
+	</div>
+</nav>
+
+<div class="container chatRoom">
+  <div class="col-sm-2"></div>
+  <div class="col-sm-8">
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".versionInfo">版本資訊</button>
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".userGuide">使用說明</button>
+	<button type="button" class="btn btn-primary" id="pushSwitch">開啟通知</button>
+	<button type="button" class="btn btn-primary" id="uploadData">上傳圖片</button>	
+	<b id="errorMessage"></b>
+	<input type="file" style="display:none" name="flFile" id="flFile">     
+	<h2>中鍋人壽沒聊天軟體很可憐</h2>
+	<div class="inputArea">
+	<input class="form-control" type="text" id="nameInput" placeholder="Name">
+	<input class="form-control" type="text" id="messageInput" placeholder="Message">  
+	</div>
+	<div id="chatText"></div>	
+	<button class="btn btn-danger" type="button" id="readMore">讀更多訊息</button>
+  </div>
+  <div class="col-sm-2"></div>
+</div>
+
+<div class="modal fade userGuide" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	  <div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myLargeModalLabel">使用說明</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span>
+				</button>
+			  </div>
+			  <div class="modal-body">     
+				  1.匿名聊天室，只要打上NAME即可使用<br>
+				  2.點上傳圖片或將圖片托拉進頁面內即可上傳<br>
+				  3.圖片請勿傳輸有個資檔案可能被鎖<br>
+			</div>
+		</div>
+	  </div>
+</div>
+
+<div class="modal fade versionInfo" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	  <div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myLargeModalLabel">版本資訊</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span>
+				</button>
+			  </div>
+			  <div class="modal-body">     
+				  0.1beta. 聊天與上傳圖片功能<br>
+				  0.2beta. 增加Push Notice功能<br>
+				=====================================<br>
+				  預計更新:<br>
+				  登入功能、Show IP
+			</div>
+		</div>
+	  </div>
+</div>
+  
+</body>
+<script type="text/template" id="chatTemplate">
+	<div class="chatItem well">
+		<b class="userName"><%= userName_data %>:</b>
+		<span class="caption" style="word-break: break-all;"><%= caption_data %></span>		
+		<p class="chatTimestsamp" style="text-align:right;"><%= chatTimestsamp_data%></p>
+	</div>
+</script>
+<script type="text/template" id="imgTemplate">
+	<div class="chatItem well">
+		<div class="chatContent">
+			<b class="userName"><%= userName_data %>:</b>
+			<span class="caption" style="word-break: break-all;"><%= caption_data %></span>
+		</div>
+		<img class="imgSrc" src="<%= fileSrc %>"><img>
+		<p class="chatTimestsamp" style="text-align:right;"><%= chatTimestsamp_data%></p>
+	</div>
+</script>
+<script src="./js/chat.js"></script>  
+<script src="./js/push.js"></script>  
+</html>

@@ -108,38 +108,42 @@ function readLastChatData()
 	var fireBaseReadRef = firebase.database().ref("/Message/" + roomName).orderByChild('timestamp').limitToLast(readRowDataFlag);
 	fireBaseReadRef.once('value', function(snapshot) {
 		var data = [];
-		snapshot.forEach(function(child) {
-		data.push(child.val());
-		}.bind(this));	    
-		for(i=0;i<data.length;i++)
-		{		
-			displayChatTemplate(data[i].username,data[i].message,timeConverter(data[i].timestamp),data[i].fileSrc);				
+		snapshot.forEach(function (child) {		    
+		    data.push(child.val());
+		}.bind(this));
+		if (data.length == 0) { NProgress.done(); $(".chatRoom").css({ "visibility": "visible" }); return; }
+		    for(i=0;i<data.length;i++)
+		    {		
+			    displayChatTemplate(data[i].username,data[i].message,timeConverter(data[i].timestamp),data[i].fileSrc);				
 			
-		}
-		lastSeq = data[0].messageSeq;
-		NProgress.done();
-		$(".chatRoom").css({ "visibility": "visible" });
+		    }
+		    lastSeq = data[0].messageSeq;
+		    NProgress.done();
+		    $(".chatRoom").css({ "visibility": "visible" });
 	});		
 	
 }
 
 function readMoreChatData()
 {
-	// readRowDataFlag = readRowDataFlag + 50	
-	// var fireBaseReadRef = firebase.database().ref("/Message/" + roomName).orderByChild('timestamp').limitToLast(readRowDataFlag);
-	// fireBaseReadRef.once('value', function(snapshot) {
-	// var data = [];
-	// snapshot.forEach(function(child) {
-	// data.push(child.val());
-	// }.bind(this));	    
-	// for(i=49;i>=0;i--)
-	// {
-	// 	//displayChatMessage(data[i].username,data[i].message,data[i].timestamp);
-	// 	displayMoreTemplate(data[i].username,data[i].message,timeConverter(data[i].timestamp));		
-	// }
-	// console.log(data);
-	// });		 
-	alert("還沒作ㄏㄏ");
+    lastSeq = lastSeq - 1; //需少讀一條
+    var endSeq = lastSeq - 50;   
+    var fireBaseReadRef = firebase.database().ref("/Message/" + roomName).orderByChild('messageSeq').startAt(endSeq).endAt(lastSeq); //orderByChild('timestamp').startAt('2016/12/26 07:00:00').endAt('2017/04/26 16:00:00');
+    fireBaseReadRef.once('value', function(snapshot) {
+    var data = [];
+    snapshot.forEach(function(child) {
+    data.push(child.val());
+    }.bind(this));	    
+    for (i = data.length - 1; i >= 0; i--)
+    {
+    //displayChatMessage(data[i].username,data[i].message,data[i].timestamp);
+    displayMoreTemplate(data[i].username, data[i].message, timeConverter(data[i].timestamp));
+    console.log(data[i].messageSeq);
+    }
+	 
+    });
+    lastSeq = endSeq;
+    //alert("還沒作ㄏㄏ");
 }
 
 function addChatData(fileSrc)
@@ -147,9 +151,12 @@ function addChatData(fileSrc)
 	var name = $('#nameInput').val();
 	var content = $('#messageInput').val();
 	var timeStamp = Date.now();
+	var tempSeq;
 	fileSrc = fileSrc;
 	messageSeq = messageSeq + 1;
-	firebase.database().ref('Message/'+ roomName + '/' + messageSeq).set({
+	tempSeq = messageSeq;
+	if (messageSeq < 10) { tempSeq = '0' + tempSeq }
+	firebase.database().ref('Message/' + roomName + '/' + tempSeq + '-' + timeStamp).set({
 	username: name,
 	message: content,
 	timestamp: timeStamp,
@@ -264,13 +271,26 @@ function displayChatTemplate(name,content,timestamp,fileSrc)
 		}));
 	}
 }
-function displayMoreTemplate(name,content,timestamp)
-{	
-	$("#chatText").append(template({
-		userName_data: name,
-		caption_data: content,
-		chatTimestsamp_data: timestamp
-	}));
+function displayMoreTemplate(name, content, timestamp, fileSrc)
+{
+    var chatTemplate = _.template($('#chatTemplate').html());
+    var imgTemplate = _.template($('#imgTemplate').html());
+    if (fileSrc == "" || typeof fileSrc == "undefined") {
+        $("#chatText").append(chatTemplate({
+            userName_data: name,
+            caption_data: content,
+            chatTimestsamp_data: timestamp
+        }));
+    }
+    else {
+        $("#chatText").append(imgTemplate({
+            userName_data: name,
+            caption_data: content,
+            chatTimestsamp_data: timestamp,
+            fileSrc: fileSrc
+        }));
+    }
+   
 }
 
 function UploadFile(files)
@@ -320,7 +340,7 @@ function getFirebaseUrlandUploadImgSrc(fileSrc)
 	});
 }
 
-//簡查檔案型態////////////////////
+//檢查檔案型態////////////////////
 function getExtension(filename) {
     var parts = filename.split('.');
     return parts[parts.length - 1];
